@@ -1,0 +1,5 @@
+h1. My Ruby Warrior
+
+Player scripts for the "Ruby Warrior game":https://github.com/ryanb/ruby-warrior
+
+*Beginner* directory contains script for the beginner tower. This script scores *620* points in the epic mode with average grade S.
