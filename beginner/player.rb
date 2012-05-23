@@ -19,12 +19,10 @@ class Player
     # Object that warrior has behind his back.
     if behind = scan(warrior, :backward)
       @continue_exploring ||= true unless behind.wall?
-
-      @continue_exploring = false if ahead && ahead.wall?
     end
 
     # Heal.
-    if is_hurt?(warrior) && !is_attacked?(warrior) && !ahead
+    if is_hurt?(warrior) && !is_attacked?(warrior) && !see_stairs?(warrior)
       warrior.rest!
     # Enemy is near.
     elsif warrior.feel.enemy?
@@ -59,7 +57,7 @@ class Player
       warrior.rescue!
     # Explore.
     else
-      if warrior.feel.wall? || (warrior.feel.stairs? && @continue_exploring)
+      if (ahead && ahead.wall? && @continue_exploring) || (see_stairs?(warrior) && @continue_exploring)
         @continue_exploring = false
         warrior.pivot!
       else
@@ -93,6 +91,14 @@ class Player
     return false unless object
 
     return true if object.unit && object.unit.respond_to?(:shoot_power)
+
+    false
+  end
+  
+  def see_stairs?(warrior, direction = :forward)
+    warrior.look(direction).each do |val|
+      return true if val.stairs?
+    end
 
     false
   end
